@@ -6,18 +6,19 @@ from neighborhood import make_neighborhood
 from scipy import optimize
 
 # Initialize parameters of the model
-m = 500
-rad = 2
-gamma = 0.25
-phi = 0.25
-w = [0.5,0.5,0.5,0.5,0.5,0.5]
+m = 800
+rad = 3
+gamma = 0.5
+phi = 0.5
+eps = 0.00000001
+w = [0.5,0.5,0.5,0.5,1.0,1.0]
 wN = [0.5,0.5,0.5]
 wC = [0.5,0.5]
 wM1 = [0.5,0.5]
 wM2 = [0.5,0.5]
-n = 5
-q = 2
-t = 10
+n = 10
+q = 5
+t = 30
 
 # Make social network using PA model
 network = make_graph(m, q)
@@ -146,9 +147,9 @@ def preference_falsification():
     falsifications = [0 for x in xrange(5)]
     falsifications[0] = abs((sum(ai[end]) / m) - (sum(ai[0]) / m))
     falsifications[1] = abs(aC[end] - aC[0])
-    falsifications[2] = abs(aN[end] - aN[0]
-    falsifications[3] = abs(aM1[end] - aN[0]
-    falsifications[4] = abs(aM2[end] - aN[0]
+    falsifications[2] = abs(aN[end] - aN[0])
+    falsifications[3] = abs(aM1[end] - aN[0])
+    falsifications[4] = abs(aM2[end] - aN[0])
     return falsifications
 
 print "equilibrium_timestep: " + str(equilibrium_timestep)

@@ -8,14 +8,14 @@ from scipy import optimize
 # Initialize parameters of the model
 m = 800
 rad = 3
-gamma = 0.25
+gamma = 3.5
 eps = 0.00000001
 w = [0.5,0.5,0.5,0.5]
 wN = [0.5,0.5]
 wC = [0.5,0.5]
-n = 5
-q = 2
-t = 22
+n = 8
+q = 5
+t = 25
 
 # Make social network using PA model
 network = make_graph(m, q)

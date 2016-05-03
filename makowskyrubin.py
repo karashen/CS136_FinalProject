@@ -6,15 +6,16 @@ from neighborhood import make_neighborhood
 from scipy import optimize
 
 # Initialize parameters of the model
-m = 500
-rad = 2
+m = 800
+rad = 3
 gamma = 0.25
+eps = 0.00000001
 w = [0.5,0.5,0.5,0.5]
 wN = [0.5,0.5]
 wC = [0.5,0.5]
 n = 5
 q = 2
-t = 10
+t = 22
 
 # Make social network using PA model
 network = make_graph(m, q)
@@ -72,22 +73,52 @@ def run_round(timestep):
     return
 
 # Keep statistics
-citizensmeans = []
+citizensmeans = [sum(ai[0]) / m]
+equilibrium_timestep = 100
 
-for step in range(1,t):
+for step in range(1,t+1):
     print "Step " + str(step)
     run_round(step)
     citizensmeans.append(sum(ai[step]) / m)
+    difference = citizensmeans[step] - citizensmeans[step-1]
+    print str(citizensmeans[step])
+    print str(citizensmeans[step-1])
+    print str(difference)
+    if abs(difference) <= eps:
+        equilibrium_timestep = step
+        break;
+
+end = min(t, step)
+citizen_mean = sum(citizensmeans) / end
+central_mean = sum(aC.values()) / end
+noncentral_mean = sum(aN.values()) / end
 
 print "Citizens' Actions"
-print "Mean = " + str(sum(citizensmeans) / t)
+print "Mean = " + str(citizen_mean)
 print "Min = " + str(min(citizensmeans))
 print "Max = " + str(max(citizensmeans))
 print "Central Authority's Actions"
-print "Mean = " + str(sum(aC.values()) / t)
+print "Mean = " + str(central_mean)
 print "Min = " + str(min(aC.values()))
 print "Max = " + str(max(aC.values()))
 print "Noncentral Authority's Actions"
-print "Mean = " + str(sum(aN.values()) / t)
+print "Mean = " + str(noncentral_mean)
 print "Min = " + str(min(aN.values()))
 print "Max = " + str(max(aN.values()))
+
+def authority_citizen_discepancy():
+    discrepancies = [0 for x in xrange(2)]
+    discrepancies[0] = abs(aC[end] - (sum(ai[end]) / m))
+    discrepancies[1] = abs(aN[end] - (sum(ai[end]) / m))
+    return discrepancies
+
+def preference_falsification():
+    falsifications = [0 for x in xrange(3)]
+    falsifications[0] = abs((sum(ai[end]) / m) - (sum(ai[0]) / m))
+    falsifications[1] = abs(aC[end] - aC[0])
+    falsifications[2] = abs(aN[end] - aN[0])
+    return falsifications
+
+print "equilibrium_timestep: " + str(equilibrium_timestep)
+print "authority_citizen_discrepancy: " + str(authority_citizen_discepancy())
+print "preference_falsification: " + str(preference_falsification())

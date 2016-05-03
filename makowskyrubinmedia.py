@@ -9,9 +9,12 @@ from scipy import optimize
 m = 500
 rad = 2
 gamma = 0.25
-w = [0.5,0.5,0.5,0.5]
-wN = [0.5,0.5]
+phi = 0.25
+w = [0.5,0.5,0.5,0.5,0.5,0.5]
+wN = [0.5,0.5,0.5]
 wC = [0.5,0.5]
+wM1 = [0.5,0.5]
+wM2 = [0.5,0.5]
 n = 5
 q = 2
 t = 10
@@ -23,6 +26,8 @@ network = make_graph(m, q)
 blissi = [random.normal() for x in xrange(m)]
 blissN = random.normal()
 blissC = random.normal()
+blissM1 = random.normal(-1)
+blissM2 = random.normal(1)
 
 # Initialize action history lists
 ai = {}
@@ -31,6 +36,10 @@ aN = {}
 aN[0] = blissN
 aC = {}
 aC[0] = blissC
+aM1 = {}
+aM1[0] = blissM1
+aM2 = {}
+aM2[0] = blissM2
 
 # Find neighbors of distance at most r from each node
 neighbors = {}
@@ -47,13 +56,16 @@ def run_round(timestep):
     # Utility maximization for central authority
     def UC(x): 
         mean = sum(ai[timestep-1]) / m
-        return (-wC[0] * (x - blissC) ** 2 - wC[1] * (x - mean) ** 2)
+        mediamean = (aM1[timestep-1] + aM2[timestep-1]) / 2
+        return (-wC[0] * (x - blissC) ** 2 - wC[1] * (x - mean) ** 2 - phi * (x - mediamean) ** 2)
+        # return (-wC[0] * (x - blissC) ** 2 - wC[1] * (x - mean) ** 2)
     aC[timestep] = optimize.fmin(lambda x: -UC(x), 0, disp=0)[0]
     
     # Utility maximization for non-central authority
     def UN(x): 
         mean = sum(ai[timestep-1]) / m
-        return (-wN[0] * (x - blissN) ** 2 - wN[1] * (x - mean) ** 2 - gamma * (x-aC[timestep]) ** 2)
+        mediamean = (aM1[timestep-1] + aM2[timestep-1]) / 2
+        return (-wN[0] * (x - blissN) ** 2 - wN[1] * (x - mean) ** 2 - gamma * (x-aC[timestep]) ** 2 - wN[2] * (x - mediamean) ** 2)
     aN[timestep] = optimize.fmin(lambda x: -UN(x), 0, disp=0)[0]
 
     # Utility maximization for each agent
@@ -62,12 +74,23 @@ def run_round(timestep):
         for neighbor in neighborhoods[node]:
             actions.append(ai[timestep-1][neighbor])
         mean_neighbors = sum(actions) / len(neighborhoods[node])
-        return (-w[0] * (x - blissi[node]) ** 2 - w[1] * (x - mean_neighbors) ** 2 - w[2] * (x-aN[timestep]) ** 2 - w[3] * (x - aC[timestep]) ** 2)
+        return (-w[0] * (x - blissi[node]) ** 2 - w[1] * (x - mean_neighbors) ** 2 - w[2] * (x-aN[timestep]) ** 2 - w[3] * (x - aC[timestep]) ** 2 - w[4] * (x-aM1[timestep-1]) - w[5] * (x-aM2[timestep-1]))
 
     for i in range(m):
         if i == 0:
             ai[timestep] = []
         ai[timestep].append(optimize.fmin(lambda x: -UI(x, i),0, disp=0)[0])
+    
+    # Utility maximization for each media agent
+    def UM1(x): 
+        mean = sum(ai[timestep]) / m
+        return (-wM1[0] * (x - blissM1) ** 2 - wM1[1] * (x - mean) ** 2)
+    aM1[timestep] = optimize.fmin(lambda x: -UM1(x), 0, disp=0)[0]
+
+    def UM2(x): 
+        mean = sum(ai[timestep]) / m
+        return (-wM2[0] * (x - blissM2) ** 2 - wM2[1] * (x - mean) ** 2)
+    aM2[timestep] = optimize.fmin(lambda x: -UM2(x), 0, disp=0)[0]
 
     return
 
@@ -91,3 +114,11 @@ print "Noncentral Authority's Actions"
 print "Mean = " + str(sum(aN.values()) / t)
 print "Min = " + str(min(aN.values()))
 print "Max = " + str(max(aN.values()))
+print "Media 1's Actions"
+print "Mean = " + str(sum(aM1.values()) / t)
+print "Min = " + str(min(aM1.values()))
+print "Max = " + str(max(aM1.values()))
+print "Media 2's Actions"
+print "Mean = " + str(sum(aM2.values()) / t)
+print "Min = " + str(min(aM2.values()))
+print "Max = " + str(max(aM2.values()))

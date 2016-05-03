@@ -1,38 +1,7 @@
 import matplotlib.pyplot as plt
 
-# Changing social radius
-# r = 1
-eq_time = 
-pref_false = 
-discrepancy = 
-
-# r = 2
-eq_time = 
-pref_false = 
-discrepancy = 
-
-# r = 3
-eq_time = 
-pref_false = 
-discrepancy = 
-
-# r = 4
-eq_time = 
-pref_false = 
-discrepancy = 
-
-# r = 5
-eq_time = 
-pref_false = 
-discrepancy = 
-
-# Changing social network size
-
-# Changing gamma
-
-# Changing phi
-
-
-plt.plot([1,2,3,4], [1,4,9,16], '-ro')
-plt.axis([0, 6, 0, 20])
+plt.plot([0,0.5,1,1.5,2,2.5,3,3.5,4], [18,17,16,13,19,18,16,14,18], '-bo')
+plt.axis([0, 4, 0, 20])
+plt.ylabel('Equilibrium time')
+plt.xlabel('Centralization')
 plt.show()

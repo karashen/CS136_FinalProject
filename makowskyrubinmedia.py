@@ -9,7 +9,7 @@ from scipy import optimize
 m = 800
 rad = 3
 gamma = 0.5
-phi = 2.5
+phi = 3.5
 eps = 0.00000001
 w = [0.5,0.5,0.5,0.5,1.0,1.0]
 wN = [0.5,0.5,0.5]

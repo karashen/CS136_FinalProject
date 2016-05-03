@@ -5,16 +5,21 @@
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \f0\fs24 \cf0 With Media, without media\
-\
-Preference Falsification - at end of game, how different are actions from bliss points\
-When equilibrium happens - actions no longer change between time steps\
-Difference from authority\
-\
-Parameters:\
-M, q\
-rad, n\
-t\
-weights\
+\pard\tx720\tx1440\tx2160\tx2880\tx3536\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Equilibrium timestep - actions no longer change between time steps\
+	when rate of change dips below epsilon = 0.000000001\
+\pard\tx720\tx1440\tx2160\tx2880\tx3536\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Preference falsification - at end of game, how different are actions from bliss points\
+	average difference between citizen actions and bliss point at end\
+	average difference for media at end\
+	average difference for central authority at end\
+	average difference for non-central authority at end\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 Authority-citizen discrepancy\
+	average difference between citizen actions and central authority at end\
+	average difference between citizen actions and non-central authority at end\
 \
 Graphs:\
 - Change radius (6)\
@@ -22,4 +27,13 @@ Graphs:\
 - Change gamma (6)\
 - Change phi (3)\
 \
-}
+t 20\
+q 5\
+citizens v\
+w_1 through w_4 0.5\
+w_5 w_6 1.0\
+M 800\
+R \{1,2,3,4,5\} default 3\
+N \{6,7,8,9,10\} default 8\
+gamma \{0. 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4\} default 0.5\
+phi \{0. 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4\} default }

@@ -95,12 +95,25 @@ def run_round(timestep):
     return
 
 # Keep statistics
-citizensmeans = []
+citizensmeans = [sum(ai[0]) / m]
+equilibrium_timestep = 100
 
-for step in range(1,t):
+for step in range(1,t+1):
     print "Step " + str(step)
     run_round(step)
     citizensmeans.append(sum(ai[step]) / m)
+    difference = citizensmeans[step] - citizensmeans[step-1]
+    print str(citizensmeans[step])
+    print str(citizensmeans[step-1])
+    print str(difference)
+    if abs(difference) <= eps:
+        equilibrium_timestep = step
+        break;
+
+end = min(t, step)
+citizen_mean = sum(citizensmeans) / end
+central_mean = sum(aC.values()) / end
+noncentral_mean = sum(aN.values()) / end
 
 print "Citizens' Actions"
 print "Mean = " + str(sum(citizensmeans) / t)
@@ -122,3 +135,22 @@ print "Media 2's Actions"
 print "Mean = " + str(sum(aM2.values()) / t)
 print "Min = " + str(min(aM2.values()))
 print "Max = " + str(max(aM2.values()))
+
+def authority_citizen_discepancy():
+    discrepancies = [0 for x in xrange(2)]
+    discrepancies[0] = abs(aC[end] - (sum(ai[end]) / m))
+    discrepancies[1] = abs(aN[end] - (sum(ai[end]) / m))
+    return discrepancies
+
+def preference_falsification():
+    falsifications = [0 for x in xrange(5)]
+    falsifications[0] = abs((sum(ai[end]) / m) - (sum(ai[0]) / m))
+    falsifications[1] = abs(aC[end] - aC[0])
+    falsifications[2] = abs(aN[end] - aN[0]
+    falsifications[3] = abs(aM1[end] - aN[0]
+    falsifications[4] = abs(aM2[end] - aN[0]
+    return falsifications
+
+print "equilibrium_timestep: " + str(equilibrium_timestep)
+print "authority_citizen_discrepancy: " + str(authority_citizen_discepancy())
+print "preference_falsification: " + str(preference_falsification())

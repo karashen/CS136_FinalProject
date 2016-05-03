@@ -8,7 +8,7 @@ from scipy import optimize
 # Initialize parameters of the model
 m = 800
 rad = 3
-gamma = 3.5
+gamma = 0.5
 eps = 0.00000001
 w = [0.5,0.5,0.5,0.5]
 wN = [0.5,0.5]
